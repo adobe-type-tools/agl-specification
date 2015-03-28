@@ -36,9 +36,9 @@ To map a glyph name to a character string, follow the three steps below:
 
 1. Drop all the characters from the glyph name starting with the first occurrence of a period (U+002E; FULL STOP), if any.
 
-+ Split the remaining string into a sequence of components, using underscore (U+005F; LOW LINE) as the delimiter.
+2. Split the remaining string into a sequence of components, using underscore (U+005F; LOW LINE) as the delimiter.
 
-+ Map each component to a character string according to the procedure below, and concatenate those strings; the result is the character string to which the glyph name is mapped.
+3. Map each component to a character string according to the procedure below, and concatenate those strings; the result is the character string to which the glyph name is mapped.
 
 If the font is Zapf Dingbats (PostScript FontName: *ZapfDingbats*), and the component is in the [*ITC Zapf Dingbats Glyph List*](https://github.com/adobe-type-tools/agl-aglfn), then map it to the corresponding character in that list.
 
@@ -116,7 +116,7 @@ For glyphs that represent ligatures of standard Unicode characters, there are tw
 
 1. **Descriptive**. The decomposition is expressed by joining the glyph names of the standard Unicode characters, in order, using an underscore (U+005F; LOW LINE). The glyph names of the characters should specify the "uni" or "u" prefixes and use uppercase hexadecimal digits, as described above, or with a name from AGL. For example, the "o f f i" ligature should be named "o_f_f_i."
 
-+ **UV with "uni" prefix**. The glyph name is expressed as the prefix "uni" followed by two or more sequences of four uppercase hexadecimal digits. Each sequence of four uppercase hexadecimal digits specifies a Unicode scalar value within the BMP, in order. For example, the character LATIN CAPITAL LETTER EZH WITH CIRCUMFLEX AND GRAVE, which is not in Unicode, should be named "uni01B703020300," because LATIN CAPITAL LETTER EZH is U+01B7, COMBINING CIRCUMFLEX ACCENT is U+0302, and COMBINING GRAVE ACCENT is U+0300. A maximum of seven name components can be specified with this format, due to glyph name length limitations. A ligature of the glyphs named "T.swash" and "h" can be named "T_h.swash." "T.swash_h" would be incorrect because this would be interpreted as a glyphic variant of "T." All glyph names a subject to a length-limit of 31 characters in some current software implementations, and require that they be entirely composed of characters from the following set: A–Z, a–z, 0–9, . (period, U+002E; FULL STOP), and _ (underscore, U+005F; LOW LINE).This length limit can be an issue with glyph names for ligature and ornaments.
+2. **UV with "uni" prefix**. The glyph name is expressed as the prefix "uni" followed by two or more sequences of four uppercase hexadecimal digits. Each sequence of four uppercase hexadecimal digits specifies a Unicode scalar value within the BMP, in order. For example, the character LATIN CAPITAL LETTER EZH WITH CIRCUMFLEX AND GRAVE, which is not in Unicode, should be named "uni01B703020300," because LATIN CAPITAL LETTER EZH is U+01B7, COMBINING CIRCUMFLEX ACCENT is U+0302, and COMBINING GRAVE ACCENT is U+0300. A maximum of seven name components can be specified with this format, due to glyph name length limitations. A ligature of the glyphs named "T.swash" and "h" can be named "T_h.swash." "T.swash_h" would be incorrect because this would be interpreted as a glyphic variant of "T." All glyph names a subject to a length-limit of 31 characters in some current software implementations, and require that they be entirely composed of characters from the following set: A–Z, a–z, 0–9, . (period, U+002E; FULL STOP), and _ (underscore, U+005F; LOW LINE).This length limit can be an issue with glyph names for ligature and ornaments.
 
 A brief review of some current implementation issues and the consequential limits on glyph names is provided in the document [*Glyph Names and Current Implementations*](http://partners.adobe.com/public/developer/opentype/index_glyph2.html).
 
