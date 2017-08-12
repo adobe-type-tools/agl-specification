@@ -1,6 +1,6 @@
 # Adobe Glyph List Specification
 ---
-© 1997, 1998, 2002, 2003, 2010, 2015 Adobe Systems Incorporated.
+© 1997, 1998, 2002, 2003, 2010, 2015, 2017 Adobe Systems Incorporated.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this documentation file to use, copy, publish, distribute, sublicense, and/or sell copies of the documentation, and to permit others to do the same, provided that:
 
@@ -14,7 +14,7 @@ Adobe shall not be liable to any party for any loss of revenue or profit or for 
 
 Adobe holds no patents on the subject matter of this specification.
 
-*Document v2.6. Last updated March 28, 2015*
+*Document v2.7. Last updated August 12, 2017*
 
 ---
 ## 1. Introduction
@@ -114,14 +114,44 @@ For glyphs that do not correspond to any character in the Unicode standard, the 
 
 For glyphs that represent ligatures of standard Unicode characters, there are two suggested formats for their glyph names, as follows:
 
-1. **Descriptive**. The decomposition is expressed by joining the glyph names of the standard Unicode characters, in order, using an underscore (U+005F; LOW LINE). The glyph names of the characters should specify the "uni" or "u" prefixes and use uppercase hexadecimal digits, as described above, or with a name from AGL. For example, the "o f f i" ligature should be named "o_f_f_i."
+1. **Descriptive** The decomposition is expressed by joining the glyph names of the standard Unicode characters, in order, using an underscore (U+005F; LOW LINE). The glyph names of the characters should specify the "uni" or "u" prefixes and use uppercase hexadecimal digits, as described above, or with a name from AGL. For example, the "o f f i" ligature should be named "o_f_f_i."
 
-2. **UV with "uni" prefix**. The glyph name is expressed as the prefix "uni" followed by two or more sequences of four uppercase hexadecimal digits. Each sequence of four uppercase hexadecimal digits specifies a Unicode scalar value within the BMP, in order. For example, the character LATIN CAPITAL LETTER EZH WITH CIRCUMFLEX AND GRAVE, which is not in Unicode, should be named "uni01B703020300," because LATIN CAPITAL LETTER EZH is U+01B7, COMBINING CIRCUMFLEX ACCENT is U+0302, and COMBINING GRAVE ACCENT is U+0300. A maximum of seven name components can be specified with this format, due to glyph name length limitations. A ligature of the glyphs named "T.swash" and "h" can be named "T_h.swash." "T.swash_h" would be incorrect because this would be interpreted as a glyphic variant of "T." All glyph names a subject to a length-limit of 31 characters in some current software implementations, and require that they be entirely composed of characters from the following set: A–Z, a–z, 0–9, . (period, U+002E; FULL STOP), and _ (underscore, U+005F; LOW LINE).This length limit can be an issue with glyph names for ligature and ornaments.
+2. **UV with "uni" prefix** The glyph name is expressed as the prefix "uni" followed by two or more sequences of four uppercase hexadecimal digits. Each sequence of four uppercase hexadecimal digits specifies a Unicode scalar value within the BMP, in order. For example, the character LATIN CAPITAL LETTER EZH WITH CIRCUMFLEX AND GRAVE, which is not in Unicode, should be named "uni01B703020300," because LATIN CAPITAL LETTER EZH is U+01B7, COMBINING CIRCUMFLEX ACCENT is U+0302, and COMBINING GRAVE ACCENT is U+0300. A maximum of seven name components can be specified with this format, due to glyph name length limitations. A ligature of the glyphs named "T.swash" and "h" can be named "T_h.swash." "T.swash_h" would be incorrect because this would be interpreted as a glyphic variant of "T." All glyph names a subject to a length-limit of 31 characters in some current software implementations, and require that they be entirely composed of characters from the following set: A–Z, a–z, 0–9, . (period, U+002E; FULL STOP), and _ (underscore, U+005F; LOW LINE).This length limit can be an issue with glyph names for ligature and ornaments.
 
-A brief review of some current implementation issues and the consequential limits on glyph names is provided in the document [*Glyph Names and Current Implementations*](http://partners.adobe.com/public/developer/opentype/index_glyph2.html).
+A brief review of some past implementation issues and the consequential limits on glyph names is provided in the document *Glyph Names and Current Implementations* (based on Version 1.1, dated 2003-01-31) that is provided inline below:
+
+**Introduction** This article is strongly time-dated, as it contains comments about current implementations. Please bear this in mind if reading it much after October of 2002.
+
+**Where and why glyph names are used** Following the naming conventions of the (no-longer-available) article *Unicode and Glyph Names* will currently enable copying text and searching text in PDF (*Portable Document Format*) documents under a wider variety of circumstances than having no names, or names that do not follow these conventions. In the era of the Internet, where many documents must be searchable in order to be useful, this is very important.
+
+Many PDF files are made from PostScript printer files, when the original fonts referenced by the document are not available, and the embedded font data must be used. In this case, the Unicode 'cmap' table of an OpenType font is not available, and the only clue that the PDF producer may have about the semantics of a glyph is its name.
+
+Even when the original font file is available, a glyph that does not directly correspond to a character in Unicode may still be usefully connected to a Unicode character via its name. For example, naming a decorative variant of "t" as "t.alt" allows a PDF producer to note that "t.alt" carries the same semantics as "t" for searching and other purposes.
+
+In the future, it is expected that more products than Adobe's own ones will support Unicode-based text string searching of a glyph, meaning that the scope of usefulness of these rules will become much broader.
+
+For TrueType fonts, which may be missing glyph names altogether, the presence of a Unicode value for a glyph in the 'cmap' table will still cause glyphs to be correctly associated with a Unicode character in most cases. However, for glyphs that do not map from a Unicode code point, previous comments apply.
+
+**Why is the prefix "u" not yet recommended for glyphs that are encoded in Unicode's BMP?** The prefix "u" is not supported by Acrobat Versions 4 and 5. It became supported by Acrobat Version 6 and later, which is also when support for Unicode characters outside the BMP (*Basic Multilingual Plane*) was introduced. AGL names and glyph names that use the prefix "uni," along with the "." and "_" parsing rules, are already supported by Acrobat Versions 4 and 5.
+
+**Length and character set limitations on names** Glyphs from Western OpenType/CFF and TrueType fonts must still be referenced in many workflows as name-keyed font data. As a result, glyph names are still subject to the length and character set limitations that are imposed by the Type 1 specification and PostScript interpreter implementations. Both of these require that a glyph name be no longer than 31 characters in length, must not start with a digit or period, and must be entirely comprised of characters from the following limited set:
+
+* A through Z
+* a through z
+* 0 through 9
+* . (*period*)
+* _ (*underscore*)
+
+The only exception to these requirements is the special ".notdef" glyph.
+
+For example, "twocents," "a1," and "_" are valid glyph names, but "2cents" and ".twocents" are not.
+
+**ATM and kerning pair filtering** For many applications, support for kerning in OpenType fonts was provided to a limited extent by the Windows and Macintosh versions of ATM (*Adobe Type Manager*). This limitation arises because most applications that were not OpenType-aware assumed that all of the kerning pairs in a font can reasonably fit is a single table, and that there will be no more than a few thousand kerning pairs. Providing more kerning pairs than this caused such applications to crash. With class-based kerning supported by OpenType layout, even a font with only 220 glyphs would usually exceed this limit, if well-kerned. In order to allow use of such OpenTyoe fonts without crashing many current applications, ATM supported kerning via legacy OS-based APIs by first fully expanding the class-based kerning to a list of single glyph-name pairs, and then filtering this list through a hard-coded list of glyph names. If the glyph name on either side of the kerning pair was not present in the filter list, the entire kerning pair was omitted. *The kerning pair filtering list for Windows 95 and Mac OS 9, along with that for Windows NT and Windows 2000, is no longer available.*
 
 ---
 ## 7. Document Changes
+v2.7 (August 12, 2017) The external document entitled *Glyph Names and Current Implementations*, with editorial changes, was appended to Section 6.
+
 v2.6 (March 28, 2015) Minor editorial revision related to migrating it to GitHub.
 
 v2.5 (November 10, 2010) Minor editorial revision related to making it an open specification.
